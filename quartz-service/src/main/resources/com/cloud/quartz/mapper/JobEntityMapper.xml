@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="JobEntityMapper">
+    <resultMap id="BaseResultMap" type="com.cloud.quartz.model.JobEntity">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="group" jdbcType="VARCHAR" property="group"/>
+        <result column="cron" jdbcType="VARCHAR" property="cron"/>
+        <result column="class_name" jdbcType="VARCHAR" property="className"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, `name`, `group`, cron, class_name, description, `status`, create_time, update_time
+    </sql>
+    <select id="getById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM job_entity
+        WHERE id = #{id}
+    </select>
+    <select id="findAll" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM job_entity
+        ORDER BY create_time DESC
+    </select>
+    <select id="findAllOpen" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM job_entity WHERE status = "OPEN"
+        ORDER BY create_time DESC
+    </select>
+
+    <insert id="insertSelective"  useGeneratedKeys="true" keyProperty="id" parameterType="com.cloud.quartz.model.JobEntity">
+        insert into job_entity
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                `name`,
+            </if>
+            <if test="group != null">
+                `group`,
+            </if>
+            <if test="cron != null">
+                cron,
+            </if>
+            <if test="className != null">
+                class_name,
+            </if>
+            <if test="description != null">
+                description,
+            </if>
+            <if test="status != null">
+                `status`,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                #{name},
+            </if>
+            <if test="group != null">
+                #{group},
+            </if>
+            <if test="cron != null">
+                #{cron},
+            </if>
+            <if test="className != null">
+                #{className},
+            </if>
+            <if test="description != null">
+                #{description},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.cloud.quartz.model.JobEntity">
+        update job_entity
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="group != null">
+                `group` = #{group},
+            </if>
+            <if test="cron != null">
+                cron = #{cron},
+            </if>
+            <if test="className != null">
+                class_name = #{className},
+            </if>
+            <if test="description != null">
+                description =  #{description},
+            </if>
+            <if test="status != null">
+                `status` = #{status},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+</mapper>
